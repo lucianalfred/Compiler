@@ -23,12 +23,18 @@ void multiply();
 void divide();
 void expression();
 int isAddOp(char c);
+void ident();
+void assignment();
 //Programa principal
 
 int main(){
     init();
     expression();
 
+    if(look != '\n')
+    {
+        expected("NewLine");
+    }
 
     return 0;
 }
@@ -161,7 +167,7 @@ void term()
 
 int isAddOp(char c)
 {
-    return (c == '-' || c == '-');
+    return (c == '-' || c == '+');
 }
 void expression()
 {
@@ -215,11 +221,26 @@ void factor()
         expression();
         match(')');
     }
+    else if(isalpha(look))
+       ident();
     else 
         emit("MOV AX, %c", getNum());
     
 }
 
+void ident()
+{
+    char name;
+    name = getName();
+    if(look == '(')
+    {
+        match('(');
+        match(')');
+        emit("CALL %c", name);
+    }
+    else
+        emit("MOV AX, [%c]", name);
+}
 //reconhece e traduuz uma multiplicacao
 void multiply()
 {
@@ -238,4 +259,13 @@ void divide()
     emit("XCHG AX, BX");
     emit("CWD");
     emit("IDIV BX");
+}
+
+/* analisa e traduz um comando de atribuição */
+void assignment()
+{
+    char name;
+    name = getName();
+    match('=');
+    emit("MOOV [%c], AX, name");
 }
