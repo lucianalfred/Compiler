@@ -1,7 +1,7 @@
 # Compilador - Compiler 
 
 ## Descrição
-Este projeto é um compilador desenvolvido para [linguagem-alvo ou propósito], com o objetivo de traduzir código-fonte em [formato de saída, como código objeto ou outra linguagem]. O desenvolvimento inclui a implementação de todas as etapas do processo de compilação, desde a análise lexical até a geração de código.
+Este projeto é um compilador desenvolvido para ---, com o objetivo de traduzir código-fonte em Assembly. O desenvolvimento inclui a implementação de todas as etapas do processo de compilação, desde a análise lexical até a geração de código.
 
 ## Funcionalidades
 - **Análise Lexical**: Identifica tokens no código-fonte.
