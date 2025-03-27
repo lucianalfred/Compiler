@@ -23,7 +23,7 @@ typedef struct {
     char lexema[MAX_LEXEMA];
 } EntradaTabela;
 
-// Declarações externas
+//externas
 extern EntradaTabela tabelaSimbolos[1000];
 extern int indiceTabela;
 extern FILE *arquivo;
