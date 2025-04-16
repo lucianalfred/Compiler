@@ -2,42 +2,35 @@
 #define ANALISADOR_LEXICO_H
 
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_LEXEMA 100
+#define MAX_TOKEN_NAME 50
+#define FIM_DE_ARQUIVO 9
 
-//Definicao dos Tokens
-#define PALAVRA_RESERVADA 1
-#define IDENTIFICADOR 2
-#define NUMERO_INTEIRO 3
-#define OPERADOR_LOGICO 4
-#define OPERADOR_RELACIONAL 5
-#define CARACTER_ESPECIAL 6
-#define PONTUACAO 7
-#define OPERADOR_ARITMETICO 8
-#define FIM_DE_ARQUIVO 9 
-
-typedef struct {
+typedef struct EntradaTabela {
     int token;
     char lexema[MAX_LEXEMA];
-    int  linha;
+    char token_name[MAX_TOKEN_NAME];
+    int linha;
+    struct EntradaTabela *prox;
 } EntradaTabela;
 
-//externas
-extern EntradaTabela tabelaSimbolos[1000];
-extern int indiceTabela;
+extern EntradaTabela *tabelaSimbolos;
+
 extern FILE *arquivo;
 extern int linha;
 extern int coluna;
 
-// Protótipos das funções
+
 char ler_caractere();
 void volta_caractere(char c);
-void gravar_token(int token, const char *lexema);
+void gravar_token(int token, const char *lexema, const char *token_name);
 int analex();
-int e_palavra_reservada(const char *lexema);
+int e_palavra_reservada(const char *lexema, char *token_name);
 void imprimir_tabela_simbolos();
+void liberar_tabela_simbolos();
 
 #endif

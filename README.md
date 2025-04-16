@@ -15,16 +15,6 @@ Este projeto é um compilador desenvolvido para c++, com o objetivo de traduzir 
 - Ferramentas e Bibliotecas: 
 - Plataforma: [Linux, Windows, MacOS]
 
-## Estrutura do Projeto
-```
-📂 compilador
-├── 📂 src                # Código-fonte do compilador
-├── 📂 tests              # Casos de teste
-├── 📂 docs               # Documentação
-├── 📄 README.md          # Este arquivo
-└── 📄 LICENSE            # Licença do projeto
-```
-
 ## Como Usar
 1. Clone o repositório:
    ```sh

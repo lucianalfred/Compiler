@@ -15,17 +15,20 @@ O analisador reconhece linguagens regulares expressas por:
 ### 2. Arquitetura do Código
 
 **Tabela de Símbolos:**
+
 - Estrutura `EntradaTabela` armazena tokens e lexemas
 - Funciona como saída do analisador e entrada para o parser
 - Implementada como array global para simplicidade
 
 **Máquina de Estados:**
+
 - `estado` controla o fluxo de reconhecimento
 - Transições determinísticas baseadas em:
   - `isalpha()`, `isdigit()` para classes de caracteres
   - Caracteres específicos como '_', '\n'
 
 **Buffer de Lexemas:**
+
 - `lexema[MAX_LEXEMA]` acumula caracteres durante o reconhecimento
 - Resetado quando um token é completo
 
@@ -56,6 +59,7 @@ graph TD
 ### 4. Teoria de Linguagens Aplicada
 
 **Linguagem Reconhecida**:
+
 - Conjunto de tokens válidos forma a linguagem regular
 - Expressível por expressões regulares:
   - `if|else|while|for|int|float|char|return` (palavras reservadas)
@@ -63,6 +67,7 @@ graph TD
   - `[0-9]+` (números inteiros)
 
 **Propriedades Formais**:
+
 - Prefixo máximo (greedy matching)
 - Prioridade implícita (ordem dos casos no switch)
 - Reconhecimento sem retrocesso (determinístico)
@@ -70,12 +75,14 @@ graph TD
 ### 5. Limitações e Melhorias Potenciais
 
 **Limitações Atuais**:
+
 - Não suporta números decimais/científicos
 - Operadores multi-caracter (==, !=)
 - Strings/comentários
 - Tratamento de erros básico
 
 **Extensões Teóricas**:
+
 1. **Autômatos de Pilha**: Para linguagens livres de contexto
 2. **Tabelas de Símbolos Hierárquicas**: Para escopos aninhados
 3. **Gerador de Analisadores**: Usando Lex/Yacc

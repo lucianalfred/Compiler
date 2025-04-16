@@ -1,17 +1,14 @@
+int main()
+{
+    int a;
+    int c;
+    int d = a + c---;
+    //print de saida
+    /* comentario explicativo
+    acerca do codigo
+    */
+    
+    printf("soma  d = a + c (%d)",d);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-int ana;
+    return 0;
+}

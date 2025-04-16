@@ -1,11 +1,5 @@
 #include "analisador_lexico.h"
 
-// Definições das variáveis globais
-EntradaTabela tabelaSimbolos[1000];
-int indiceTabela = 0;
-FILE *arquivo = NULL;
-int linha = 1;
-int coluna = 1;
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -25,6 +19,9 @@ int main(int argc, char *argv[]) {
 
     fclose(arquivo);
     imprimir_tabela_simbolos();
+
+    // Libera memória da lista
+    liberar_tabela_simbolos();
 
     return 0;
 }
