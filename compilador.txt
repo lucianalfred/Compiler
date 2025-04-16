@@ -1,0 +1,2 @@
+Primeira fase: Analisador sintatico
+Segunda fase: Analisador semantico
