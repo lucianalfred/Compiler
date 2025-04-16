@@ -27,6 +27,7 @@ void volta_caractere(char c) {
 void gravar_token(int token, const char *lexema) {
     if (indiceTabela < 1000) {
         tabelaSimbolos[indiceTabela].token = token;
+        tabelaSimbolos[indiceTabela].linha = token;
         strcpy(tabelaSimbolos[indiceTabela].lexema, lexema);
         indiceTabela++;
     }
@@ -47,10 +48,10 @@ int e_palavra_reservada(const char *lexema) {
 
 void imprimir_tabela_simbolos() {
     printf("Tabela de Símbolos:\n");
-    printf("Token\t\tLexema\n");
+    printf("Token\t\tLexema\t\tLinha\\n");
     printf("----------------------------\n");
     for (int i = 0; i < indiceTabela; i++) {
-        printf("%d\t\t%s\n", tabelaSimbolos[i].token, tabelaSimbolos[i].lexema);
+        printf("%d\t\t%s\t\t%d\n", tabelaSimbolos[i].token, tabelaSimbolos[i].lexema, tabelaSimbolos[i].linha);
     }
 }
 
@@ -76,7 +77,7 @@ int analex() {
                     lexema[pos++] = c;
                     estado = 3;
                 } else if (isspace(c)) {
-                    // Ignora espaços
+                   
                 } else {
                     lexema[pos++] = c;
                     lexema[pos] = '\0';
@@ -105,6 +106,7 @@ int analex() {
                 break;
 
             case 3:
+                //inteiros'
                 if (isdigit(c)) {
                     lexema[pos++] = c;
                 } else {
@@ -114,6 +116,18 @@ int analex() {
                     gravar_token(NUMERO_INTEIRO, lexema);
                     return NUMERO_INTEIRO;
                 }
+                break;
+            case 4:
+                //operadores relacionais
+                break;
+            case 5:
+                //
+                break;
+            case 6:
+                //
+                break;
+            case 6:
+                //
                 break;
         }
     }

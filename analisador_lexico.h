@@ -12,6 +12,7 @@
 #define PALAVRA_RESERVADA 1
 #define IDENTIFICADOR 2
 #define NUMERO_INTEIRO 3
+#define OPERADOR_LOGICO 4
 #define OPERADOR_RELACIONAL 5
 #define CARACTER_ESPECIAL 6
 #define PONTUACAO 7
@@ -21,6 +22,7 @@
 typedef struct {
     int token;
     char lexema[MAX_LEXEMA];
+    int  linha;
 } EntradaTabela;
 
 //externas
