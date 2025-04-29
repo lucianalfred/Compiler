@@ -10,6 +10,7 @@
 #define MAX_TOKEN_NAME 50
 #define FIM_DE_ARQUIVO 9
 
+
 typedef struct EntradaTabela {
     int token;
     char lexema[MAX_LEXEMA];

@@ -14,13 +14,13 @@ int main(int argc, char *argv[]) {
     }
 
     while (analex() != FIM_DE_ARQUIVO) {
-        // Continua analisando
+    
     }
 
     fclose(arquivo);
     imprimir_tabela_simbolos();
 
-    // Libera memória da lista
+ 
     liberar_tabela_simbolos();
 
     return 0;

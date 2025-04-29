@@ -1,0 +1,4 @@
+programa     → lista_de_declaracoes
+lista_de_declaracoes → declaracao lista_de_declaracoes | ε
+declaracao   → tipo TOKEN_IDENTIFIER TOKEN_SEMICOLON
+tipo         → TOKEN_INT | TOKEN_FLOAT | TOKEN_CHAR

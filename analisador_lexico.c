@@ -5,6 +5,14 @@ FILE *arquivo;
 int linha = 1;
 int coluna = 1;
 
+//variaveis semanticas
+
+int token_atual;
+char lexema_atual[MAX_LEXEMA];
+char nome_token_atual[MAX_TOKEN_NAME];
+
+
+
 char ler_caractere() {
     char c = fgetc(arquivo);
     if (c == '\n') {
@@ -300,5 +308,69 @@ int analex() {
                 gravar_token(6, lexema, "TOKEN_UNKNOWN");
                 return 6;
         }
+    }
+}
+
+
+// semantico
+
+void consumir(){
+    token_atual = analex();
+
+    if(tabelaSimbolos){
+        strcpy(lexema_atual, tabelaSimbolos->lexema);
+        strcpy(nome_token_atual, tabelaSimbolos->token_name);
+    }
+
+}
+
+//abordagem recursiva descendente
+
+void erro(const char *esperado) {
+    printf("Erro de sintaxe na linha %d: esperado '%s', encontrado '%s'\n",
+           linha, esperado, nome_token_atual);
+    exit(1);
+}
+
+void combinar(int esperado) {
+    if (token_atual == esperado) {
+        consumir_token();
+    } else {
+        erro_sintaxe(nome_token_atual);
+    }
+}
+
+void tipo() {
+    if (strcmp(nome_token_atual, "TOKEN_INT") == 0 ||
+        strcmp(nome_token_atual, "TOKEN_FLOAT") == 0 ||
+        strcmp(nome_token_atual, "TOKEN_CHAR") == 0) {
+        consumir_token();
+    } else {
+        erro_sintaxe("tipo (int, float ou char)");
+    }
+}
+
+void declaracao() {
+    tipo();
+    if (strcmp(nome_token_atual, "TOKEN_IDENTIFIER") == 0) {
+        consumir_token();
+        combinar(6); // TOKEN_SEMICOLON tem valor 6 conforme o teu analex
+    } else {
+        erro_sintaxe("identificador");
+    }
+}
+
+void lista_de_declaracoes() {
+    while (strcmp(nome_token_atual, "TOKEN_INT") == 0 ||
+           strcmp(nome_token_atual, "TOKEN_FLOAT") == 0 ||
+           strcmp(nome_token_atual, "TOKEN_CHAR") == 0) {
+        declaracao();
+    }
+}
+
+void programa() {
+    lista_de_declaracoes();
+    if (token_atual != 9) { // FIM_DE_ARQUIVO
+        erro_sintaxe("fim do arquivo");
     }
 }
