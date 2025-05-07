@@ -1,4 +1,140 @@
-programa     → lista_de_declaracoes
-lista_de_declaracoes → declaracao lista_de_declaracoes | ε
-declaracao   → tipo TOKEN_IDENTIFIER TOKEN_SEMICOLON
-tipo         → TOKEN_INT | TOKEN_FLOAT | TOKEN_CHAR
+<programa> ::= <decl-lista>
+
+<decl-lista> ::= <decl> <decl-lista> | ε
+
+<decl> ::= <decl-funcao> 
+         | <decl-variavel> 
+         | <decl-classe> 
+         | <decl-struct> 
+         | <decl-namespace>
+         | <decl-enum>
+         | <decl-typedef>
+         | <decl-template>
+         | <directive-include>
+         | <decl-using>
+
+<directive-include> ::= '#' 'include' (<string-literal> | <angle-include>) 
+<angle-include> ::= '<' <ident> ('.' <ident>)* '>'
+
+<decl-variavel> ::= [<storage-class>] <tipo> <ident> ['=' <expr>] ';'
+<storage-class> ::= 'static' | 'extern' | 'thread_local' | 'mutable' | 'register' | 'auto'
+
+<decl-funcao> ::= [<modificador-funcao>] <tipo> <ident> '(' <param-lista> ')' [<qualificador-funcao>] <bloco>
+<modificador-funcao> ::= 'virtual' | 'inline' | 'explicit' | 'friend'
+<qualificador-funcao> ::= 'const' | 'volatile' | 'noexcept' | 'override' | 'final'
+
+<param-lista> ::= <param> (',' <param>)* | ε
+<param> ::= [<modificador-param>] <tipo> [<ident>] ['=' <expr>]
+<modificador-param> ::= 'const' | 'volatile' | '&' | '&&'
+
+<tipo> ::= (<tipo-base> | <tipo-classe>) [<modificador-tipo>]*
+<tipo-base> ::= 'int' | 'float' | 'char' | 'double' | 'void' | 'bool' | 'short' | 'long' | 'signed' | 'unsigned'
+<modificador-tipo> ::= '*' | '&' | '&&' | 'const' | 'volatile' | '[' [<expr>] ']'
+<tipo-classe> ::= <ident> ['::' <ident>]*
+
+<bloco> ::= '{' <stmt-lista> '}'
+
+<stmt-lista> ::= <stmt> <stmt-lista> | ε
+
+<stmt> ::= <stmt-expr> 
+         | <stmt-if> 
+         | <stmt-while> 
+         | <stmt-for> 
+         | <stmt-return> 
+         | <stmt-switch>
+         | <stmt-break>
+         | <stmt-continue>
+         | <stmt-goto>
+         | <stmt-try>
+         | <bloco> 
+         | <decl-variavel>
+
+<stmt-expr> ::= <expr> ';' | ';'
+<stmt-if> ::= 'if' '(' <expr> ')' <stmt> [ 'else' <stmt> ]
+<stmt-while> ::= 'while' '(' <expr> ')' <stmt>
+<stmt-do-while> ::= 'do' <stmt> 'while' '(' <expr> ')' ';'
+<stmt-for> ::= 'for' '(' [<stmt-expr>] [<expr>] ';' [<expr>] ')' <stmt>
+<stmt-range-for> ::= 'for' '(' <tipo> <ident> ':' <expr> ')' <stmt>
+<stmt-return> ::= 'return' [<expr>] ';'
+<stmt-break> ::= 'break' ';'
+<stmt-continue> ::= 'continue' ';'
+<stmt-goto> ::= 'goto' <ident> ';'
+<stmt-switch> ::= 'switch' '(' <expr> ')' '{' <case-lista> '}'
+<stmt-try> ::= 'try' <bloco> <catch-lista>
+
+<case-lista> ::= (<case> | <default>)*
+<case> ::= 'case' <expr> ':' <stmt-lista>
+<default> ::= 'default' ':' <stmt-lista>
+
+<catch-lista> ::= <catch>+
+<catch> ::= 'catch' '(' [<tipo> [<ident>]] ')' <bloco>
+
+<expr> ::= <expr-atom>
+         | <expr> <op-bin> <expr>
+         | <op-un> <expr>
+         | <expr> '?' <expr> ':' <expr>
+         | <expr> '=' <expr>
+         | <expr> <op-compound> <expr>
+         | <expr> '[' <expr> ']'
+         | <expr> '.' <ident>
+         | <expr> '->' <ident>
+         | <expr> '(' <arg-lista> ')'
+         | <expr> '++'
+         | <expr> '--'
+         | 'new' <tipo> [<new-initializer>]
+         | 'delete' <expr>
+         | 'sizeof' '(' <tipo> ')'
+         | 'typeid' '(' <expr> ')'
+         | <cast> '(' <expr> ')'
+
+<expr-atom> ::= <ident> | <numero> | <string-literal> | <char-literal> | 'true' | 'false' | 'nullptr' | 'this' | '(' <expr> ')'
+<op-bin> ::= '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '>' | '<=' | '>=' | '&&' | '||' | '&' | '|' | '^' | '<<' | '>>'
+<op-un> ::= '+' | '-' | '!' | '~' | '*' | '&'
+<op-compound> ::= '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>='
+<cast> ::= 'static_cast' | 'dynamic_cast' | 'const_cast' | 'reinterpret_cast'
+
+<new-initializer> ::= '(' <arg-lista> ')' | '[' <expr> ']'
+
+<chamada> ::= <ident> '(' <arg-lista> ')'
+<arg-lista> ::= <expr> (',' <expr>)* | ε
+
+<decl-classe> ::= ['class' | 'struct'] <ident> [':' <base-lista>] '{' <membro-lista> '}' ';'
+<base-lista> ::= <base-spec> (',' <base-spec>)*
+<base-spec> ::= [<access-spec>] <tipo-classe>
+<access-spec> ::= 'public' | 'protected' | 'private'
+
+<membro-lista> ::= (<membro-decl> | <access-spec> ':')*
+<membro-decl> ::= <decl-funcao> | <decl-variavel> | <decl-typedef> | <decl-static-assert>
+
+<decl-struct> ::= 'struct' <ident> [':' <base-lista>] '{' <membro-lista> '}' ';'
+
+<decl-namespace> ::= 'namespace' [<ident>] '{' <decl-lista> '}'
+<decl-using> ::= 'using' ('namespace' <ident> | <tipo> '=' <tipo>) ';'
+
+<decl-enum> ::= 'enum' ['class' | 'struct'] <ident> ['{' <enumerator-lista> '}'] ';'
+<enumerator-lista> ::= <enumerator> (',' <enumerator>)*
+<enumerator> ::= <ident> ['=' <expr>]
+
+<decl-typedef> ::= 'typedef' <tipo> <ident> ';'
+<decl-alias> ::= 'using' <ident> '=' <tipo> ';'
+
+<decl-template> ::= 'template' '<' <template-param-lista> '>' <decl>
+<template-param-lista> ::= <template-param> (',' <template-param>)*
+<template-param> ::= 'class' [<ident>] 
+                   | 'typename' [<ident>] 
+                   | <tipo> <ident> ['=' <expr>]
+
+<decl-static-assert> ::= 'static_assert' '(' <expr> ',' <string-literal> ')' ';'
+
+<ident> ::= <letra> <ident-resto>
+<ident-resto> ::= (<letra-ou-digito>)*
+<letra> ::= 'a' | ... | 'z' | 'A' | ... | 'Z' | '_'
+<digito> ::= '0' | ... | '9'
+<letra-ou-digito> ::= <letra> | <digito>
+
+<numero> ::= <digito>+ ['.' <digito>*] [<sufixo-numero>]
+<sufixo-numero> ::= 'f' | 'F' | 'l' | 'L' | 'u' | 'U'
+
+<string-literal> ::= '"' (<char> | '\' <escape-seq>)* '"'
+<char-literal> ::= '\'' (<char> | '\' <escape-seq>) '\''
+<escape-seq> ::= 'n' | 't' | 'v' | 'b' | 'r' | 'f' | 'a' | '\\' | '\'' | '"' | '?' | 'x' <hex-digit>+

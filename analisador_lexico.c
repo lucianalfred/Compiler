@@ -5,13 +5,6 @@ FILE *arquivo;
 int linha = 1;
 int coluna = 1;
 
-//variaveis semanticas
-
-int token_atual;
-char lexema_atual[MAX_LEXEMA];
-char nome_token_atual[MAX_TOKEN_NAME];
-
-
 
 char ler_caractere() {
     char c = fgetc(arquivo);
@@ -32,14 +25,42 @@ void volta_caractere(char c) {
     }
 }
 
+//
+void inserir_no_fim_da_tabela(EntradaTabela **tabelaSimbolos,EntradaTabela *novo)
+{
+    if(novo == NULL)
+    {
+        return;
+    }
+
+    EntradaTabela * aux = * tabelaSimbolos;
+
+    if(*tabelaSimbolos == NULL)
+    {
+        *tabelaSimbolos = novo;
+        return;
+    }
+
+    while(aux ->prox != NULL)
+    {
+        aux = aux->prox;
+    }
+
+    aux->prox = novo;
+    novo->prox = NULL;
+
+}
+
 void gravar_token(int token, const char *lexema, const char *token_name) {
     EntradaTabela *novo = (EntradaTabela *) malloc(sizeof(EntradaTabela));
     novo->token = token;
     strcpy(novo->lexema, lexema);
     strcpy(novo->token_name, token_name);
     novo->linha = linha;
-    novo->prox = tabelaSimbolos;
-    tabelaSimbolos = novo;
+    //novo->prox = tabelaSimbolos;
+   
+    inserir_no_fim_da_tabela(&tabelaSimbolos,novo);
+    
 }
 
 int e_palavra_reservada(const char *lexema, char *token_name) {
@@ -121,10 +142,10 @@ int analex() {
             pos = 0;
 
             if (e_palavra_reservada(lexema, token_name)) {
-                gravar_token(1, lexema, token_name); // PALAVRA_RESERVADA
+                gravar_token(1, lexema, token_name);
                 return 1;
             } else {
-                gravar_token(2, lexema, "TOKEN_IDENTIFIER"); // IDENTIFICADOR
+                gravar_token(2, lexema, "TOKEN_IDENTIFIER"); 
                 return 2;
             }
         }
@@ -149,7 +170,7 @@ int analex() {
             return 3;
         }
 
-        // Literais de caractere
+        // Literais ou caractere
         if (c == '\'') {
             lexema[pos++] = c;
             c = ler_caractere();
@@ -311,66 +332,3 @@ int analex() {
     }
 }
 
-
-// semantico
-
-void consumir(){
-    token_atual = analex();
-
-    if(tabelaSimbolos){
-        strcpy(lexema_atual, tabelaSimbolos->lexema);
-        strcpy(nome_token_atual, tabelaSimbolos->token_name);
-    }
-
-}
-
-//abordagem recursiva descendente
-
-void erro(const char *esperado) {
-    printf("Erro de sintaxe na linha %d: esperado '%s', encontrado '%s'\n",
-           linha, esperado, nome_token_atual);
-    exit(1);
-}
-
-void combinar(int esperado) {
-    if (token_atual == esperado) {
-        consumir_token();
-    } else {
-        erro_sintaxe(nome_token_atual);
-    }
-}
-
-void tipo() {
-    if (strcmp(nome_token_atual, "TOKEN_INT") == 0 ||
-        strcmp(nome_token_atual, "TOKEN_FLOAT") == 0 ||
-        strcmp(nome_token_atual, "TOKEN_CHAR") == 0) {
-        consumir_token();
-    } else {
-        erro_sintaxe("tipo (int, float ou char)");
-    }
-}
-
-void declaracao() {
-    tipo();
-    if (strcmp(nome_token_atual, "TOKEN_IDENTIFIER") == 0) {
-        consumir_token();
-        combinar(6); // TOKEN_SEMICOLON tem valor 6 conforme o teu analex
-    } else {
-        erro_sintaxe("identificador");
-    }
-}
-
-void lista_de_declaracoes() {
-    while (strcmp(nome_token_atual, "TOKEN_INT") == 0 ||
-           strcmp(nome_token_atual, "TOKEN_FLOAT") == 0 ||
-           strcmp(nome_token_atual, "TOKEN_CHAR") == 0) {
-        declaracao();
-    }
-}
-
-void programa() {
-    lista_de_declaracoes();
-    if (token_atual != 9) { // FIM_DE_ARQUIVO
-        erro_sintaxe("fim do arquivo");
-    }
-}

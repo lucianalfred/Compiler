@@ -1,5 +1,5 @@
 #include "analisador_lexico.h"
-
+#include "analisador_semantico.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -13,15 +13,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    while (analex() != FIM_DE_ARQUIVO) {
-    
-    }
-
-    fclose(arquivo);
+    programa();
     imprimir_tabela_simbolos();
-
- 
     liberar_tabela_simbolos();
-
+    fclose(arquivo);
     return 0;
 }

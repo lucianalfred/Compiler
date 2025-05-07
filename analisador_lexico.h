@@ -9,7 +9,8 @@
 #define MAX_LEXEMA 100
 #define MAX_TOKEN_NAME 50
 #define FIM_DE_ARQUIVO 9
-
+#define TOKEN_IDENTIFICADOR 2
+#define TOKEN_DELIMITADOR 6
 
 typedef struct EntradaTabela {
     int token;
@@ -33,5 +34,6 @@ int analex();
 int e_palavra_reservada(const char *lexema, char *token_name);
 void imprimir_tabela_simbolos();
 void liberar_tabela_simbolos();
+
 
 #endif
