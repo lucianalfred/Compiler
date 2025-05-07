@@ -1,0 +1,13 @@
+investigar sobre Modo panic
+construir a gramatica
+
+//construir funcoes genericas
+que retorna o  tamnaho da lista; 
+//
+
+criar uma estrutura para o erro como:
+typedef struct erro{
+    int codigo_erro;
+    int linha;
+    int coluna;
+}
