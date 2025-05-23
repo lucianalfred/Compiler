@@ -11,3 +11,11 @@ typedef struct erro{
     int linha;
     int coluna;
 }
+
+//exibir erros com a cor vermelha
+
+//exibir sucesso com verde
+
+//estude com o livro do dragao
+
+//recursividade a esquerda

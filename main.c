@@ -1,5 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "analisador_lexico.h"
-#include "analisador_semantico.h"
+#include "analisador_sintatico.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -13,9 +15,11 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    programa();
-    imprimir_tabela_simbolos();
-    liberar_tabela_simbolos();
+    programa(); 
+
+    imprimir_tabela_simbolos();     
+    liberar_tabela_simbolos();  
+
     fclose(arquivo);
     return 0;
 }

@@ -1,1 +1,3 @@
 ./insight.md
+*.a
+*.o
